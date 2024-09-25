@@ -17,6 +17,21 @@
 
 //To change the delimiter, the beginning of the string will contain a separate line that looks like this: "//[delimiter]\n[numbers…]". For example, "//;\n1;2" where the delimiter is ";" should return 3.
 
+// export function add(numbers: string): number {
+//     if (!numbers) return 0;
+
+//     let delimiter = /[\n,]/;
+//     if (numbers.startsWith("//")) {
+//         const parts = numbers.split("\n");
+//         delimiter = new RegExp(`[${parts[0].slice(2)}]`);
+//         numbers = parts[1];
+//     }
+
+//     return numbers.split(delimiter).reduce((sum, num) => sum + Number(num), 0);
+// }
+
+
+// handle negative number
 export function add(numbers: string): number {
     if (!numbers) return 0;
 
@@ -27,5 +42,12 @@ export function add(numbers: string): number {
         numbers = parts[1];
     }
 
-    return numbers.split(delimiter).reduce((sum, num) => sum + Number(num), 0);
+    const numberArray = numbers.split(delimiter).map(Number);
+    const negatives = numberArray.filter(num => num < 0);
+
+    if (negatives.length > 0) {
+        throw new Error(`Negative numbers not allowed: ${negatives.join(",")}`);
+    }
+
+    return numberArray.reduce((sum, num) => sum + num, 0);
 }
